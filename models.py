@@ -32,8 +32,6 @@ CATEGORY_ICONS = {
     Category.OTHER: "📦",
 }
 
-
-# كلاس بيمثل عملية واحدة (دخل او مصروف)
 @dataclass
 class Transaction:
     id: int = None
@@ -45,18 +43,15 @@ class Transaction:
     created_at: str = ""
 
     def __post_init__(self):
-        # لو مفيش تاريخ متحدد، حط تاريخ النهاردة
         if not self.date:
             self.date = date.today().strftime("%Y-%m-%d")
         if not self.created_at:
             self.created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    # المبلغ بيرجع سالب لو مصروف، موجب لو دخل (عشان حساب الرصيد يبقى سهل)
     def signed_amount(self):
         if self.type == TransactionType.INCOME.value:
             return self.amount
         return -self.amount
-
+    
     def icon(self):
         try:
             return CATEGORY_ICONS[Category(self.category)]
